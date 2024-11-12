@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_weather/app/app_bloc/app_bloc.dart';
+import 'package:simple_weather/app/entity/entity.dart';
 
+import '../sheets/sheets.dart';
 import 'home_appbar_title.dart';
 
 class HomeAppbar extends StatelessWidget
@@ -27,7 +31,13 @@ class HomeAppbar extends StatelessWidget
       centerTitle: false,
       title: HomeAppbarTitle(
         cityName: cityName,
-        onPressed: () {},
+        onPressed: () async {
+          final City? newCity = await showCityBottomSheet(context);
+          if (newCity != null)
+            BlocProvider.of<AppBloc>(context).add(
+              AppEvent.saveCity(newCity),
+            );
+        },
       ),
     );
   }

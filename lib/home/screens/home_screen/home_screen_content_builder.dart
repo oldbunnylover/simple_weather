@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_weather/app/app_bloc/app_bloc.dart';
 import 'package:simple_weather/home/data/data.dart';
 
 import 'widgets/widgets.dart';
@@ -33,7 +34,9 @@ class _HomeScreenContentBuilderState extends State<HomeScreenContentBuilder> {
       },
       builder: (BuildContext context, HomeState state) {
         return Scaffold(
-          appBar: HomeAppbar(cityName: 'Minsk'),
+          appBar: HomeAppbar(
+            cityName: BlocProvider.of<AppBloc>(context).city.name,
+          ),
           backgroundColor: Color(0xFF4A91FF),
           body: Padding(
             padding: EdgeInsets.all(16),

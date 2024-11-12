@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:simple_weather/app/app_bloc/app_bloc.dart';
 
 import '../data.dart';
 
@@ -9,7 +12,10 @@ part 'home_state.dart';
 part 'home_bloc.freezed.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const HomeState.initial()) {
+  final AppBloc _appBloc;
+  late StreamSubscription<AppState> _appBlocSub;
+
+  HomeBloc(this._appBloc) : super(const HomeState.initial()) {
     on<HomeEvent>(_mapEventToState, transformer: sequential());
   }
 
@@ -21,13 +27,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       init: (_Init event) async => await _onInit(event, emit),
       update: (_Update event) async => await _onUpdate(event, emit),
     );
+
+    _appBlocSub = _appBloc.stream.listen((_) => add(_Update()));
+  }
+
+  @override
+  Future<void> close() async {
+    await _appBlocSub.cancel();
+    return super.close();
   }
 
   Future<void> _onInit(_Init event, Emitter<HomeState> emit) async {
     try {
       final Forecast forecast = await HomeRepo().api.fetchCurrentForecast(
-            lat: 53.893009,
-            lon: 27.567444,
+            lat: _appBloc.city.lat,
+            lon: _appBloc.city.lat,
           );
 
       emit(_Loaded(forecast: forecast));
