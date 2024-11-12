@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../data/data.dart';
 import 'weather_info_box_line.dart';
 import 'weather_info_temp.dart';
 
@@ -10,7 +11,12 @@ class HomeWeatherInfoBox extends StatelessWidget {
     fontSize: 24,
   );
 
-  const HomeWeatherInfoBox({super.key});
+  final Forecast forecast;
+
+  const HomeWeatherInfoBox({
+    super.key,
+    required this.forecast,
+  });
 
   String get currentDate => DateFormat.MMMMd().format(DateTime.now());
 
@@ -37,17 +43,21 @@ class HomeWeatherInfoBox extends StatelessWidget {
             ),
             SizedBox(height: 24),
             WeatherInfoTemp(
-              temp: 29,
-              desc: 'Cloudy',
+              temp: forecast.tempInfo.temp.round(),
+              desc: forecast.weatherInfoList.firstOrNull?.main,
             ),
             SizedBox(height: 24),
             WeatherInfoBoxLine(
-              title: 'Wind',
-              value: '${10} km/h',
+              title: 'Feels Like',
+              value: '${forecast.tempInfo.feelsLike.round()}',
             ),
             WeatherInfoBoxLine(
-              title: 'Hum',
-              value: '${54} %',
+              title: 'Wind',
+              value: '${forecast.windInfo.speed.round()} km/h',
+            ),
+            WeatherInfoBoxLine(
+              title: 'Humidity',
+              value: '${forecast.tempInfo.humidity.round()} %',
             ),
           ],
         ),

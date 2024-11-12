@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class HomeAppbarTitle extends StatelessWidget {
-  //TODO: select font
   static const TextStyle _titleTextStyle = TextStyle(
     color: Colors.white,
     fontSize: 32,
+    fontFamily: 'SFProRounded',
+    fontWeight: FontWeight.w600,
   );
 
   final String cityName;

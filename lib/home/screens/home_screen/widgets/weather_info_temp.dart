@@ -12,7 +12,7 @@ class WeatherInfoTemp extends StatelessWidget {
   );
 
   final int temp;
-  final String desc;
+  final String? desc;
 
   const WeatherInfoTemp({
     super.key,
@@ -28,10 +28,11 @@ class WeatherInfoTemp extends StatelessWidget {
           '$temp',
           style: _tempTextStyle,
         ),
-        Text(
-          desc,
-          style: _descTextStyle,
-        ),
+        if (desc?.isNotEmpty == true)
+          Text(
+            desc!,
+            style: _descTextStyle,
+          ),
       ],
     );
   }
